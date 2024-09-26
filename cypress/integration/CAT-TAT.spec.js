@@ -2,6 +2,8 @@
 
 //Define abrir a página index em todos os testes
 describe('Central de Atendimento ao Cliente TAT', function() {
+    const THREE_SECONDS_IN_MS = 3000
+
     beforeEach(function() {
         cy.visit('src/index.html')
     })    
@@ -14,24 +16,38 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 //Preenche todos os campos obrigatorios da pagina e envia o formulario
     it('preenche os campos obrigatorios e envia o formulario', function() {        
         const textArea = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut magna id augue sodales hendrerit. Morbi laoreet euismod euismod. Nam congue, diam non tempor condimentum'
+        
+        cy.clock()
+
         cy.get('#firstName').type('Andre')
         cy.get('#lastName').type('Bonatto')
         cy.get('#email').type('teste@teste.com',)
         cy.get('#open-text-area').type(textArea, {delay: 0})
-        cy.contains('button','Enviar').click()
+        cy.contains('button','Enviar').click()        
 
         cy.get('.success').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
     })
 
 //Preenche o campo de e-mail com formato invalido e valida se foi exibida mensagem de erro
     it('exibe mensagem de erro ao submeter o formularo com um email com formatacao invalida', function() {
         const textArea = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut magna id augue sodales hendrerit. Morbi laoreet euismod euismod. Nam congue, diam non tempor condimentum'
+        
+        cy.clock()
+        
         cy.get('#firstName').type('Andre')
         cy.get('#lastName').type('Bonatto')
         cy.get('#email').type('teste@teste,com')
         cy.contains('button','Enviar').click()
-        
+
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+        
+        cy.get('.success').should('not.be.visible')
     })
 
 //Preenche o campo telefone com letras e valida se o campo permaneceu vazio
@@ -45,6 +61,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 //Quando marcado checkbox do campo telefone valida se o campo foi preenchido
     it('exibe mensagem de erro quando o telefone se torna obrigatorio mas não e preenchido antes do envio do formulario', function() {
         const textArea = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut magna id augue sodales hendrerit. Morbi laoreet euismod euismod. Nam congue, diam non tempor condimentum'
+
+        cy.clock()
+
         cy.get('#firstName').type('Andre')
         cy.get('#lastName').type('Bonatto')
         cy.get('#email').type('teste@teste.com')
@@ -53,6 +72,10 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.contains('button','Enviar').click()
 
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
     })
 
 //Preenche todos os campos obrigatorios, limpa e valida se estao vazios
@@ -87,16 +110,32 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
 //Valida nao enviar formulario com campos vazios
     it('exibe mensagem de erro ao submeter o formulario sem preencher os campos obrigatorios', function() {
+        
+        cy.clock()
+        
         cy.contains('button','Enviar').click()
         
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
+
+
     })
 
 //Envia formulario preenchendo campos obrigatorios utilizando comando criado em commands.js 
     it('envia o formulario com sucesso usando um comando customizado', function() {
+
+        cy.clock()
+
         cy.fillMandatoryFieldsAndSubmit()
 
         cy.get('.success').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
     })
 
 //Seleciona e valida se foi selecionado protudo YouTube atraves de texto
