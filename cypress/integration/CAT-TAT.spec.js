@@ -14,6 +14,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
 
 //Preenche todos os campos obrigatorios da pagina e envia o formulario
+    
     it('preenche os campos obrigatorios e envia o formulario', function() {        
         const textArea = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut magna id augue sodales hendrerit. Morbi laoreet euismod euismod. Nam congue, diam non tempor condimentum'
         
@@ -248,7 +249,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             .should('not.be.visible')
     })
 
-    it.only('preenche a area de texto usando o comando invoke', function() {
+    it('preenche a area de texto usando o comando invoke', function() {
         const textArea = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut magna id augue sodales hendrerit. Morbi laoreet euismod euismod. Nam congue, diam non tempor condimentum'
 
         cy.get('#open-text-area').invoke('show')
