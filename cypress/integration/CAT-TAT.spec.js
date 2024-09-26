@@ -231,8 +231,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             cy.contains('Talking About Testing').should('be.visible')
     })
 
-//
-    it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+//Faz exibir as mensagens de sucesso, valida, esconde e valida novamente
+    it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', function() {
         cy.get('.success')
             .should('not.be.visible')
             .invoke('show')
@@ -249,10 +249,33 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             .should('not.be.visible')
     })
 
+//Simula uso de ctrl+v e valida o valor dentro do campo de texto
     it('preenche a area de texto usando o comando invoke', function() {
-        const textArea = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut magna id augue sodales hendrerit. Morbi laoreet euismod euismod. Nam congue, diam non tempor condimentum'
+        const textArea =  Cypress._.repeat('Lorem ipsum dolor sit amet. ', 3)
 
-        cy.get('#open-text-area').invoke('show')
+        cy.get('#open-text-area')
+            .invoke('val', textArea)
+            .should('have.value', textArea)
     })
 
+//Faz uma requisicao de rede e valida status, statusText e body
+    it('faz uma requisição HTTP', function() {
+        cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+            .should(function(response) {
+                const { status, statusText, body } = response
+                expect(status).to.equal(200)
+                expect(statusText).to.equal('OK')
+                expect(body).to.contain('CAC TAT')
+
+            })
+    })
+
+    it.only('encontra o gato escondido', function() {
+        cy.get('#cat')
+            .invoke('show')
+            .should('be.visible')
+        cy.get('#title')
+            .invoke('text', 'ALERA O H1')
+
+    })
 })
